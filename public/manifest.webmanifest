@@ -1,0 +1,17 @@
+{
+  "name": "Clarinz Abrasaldo — Web Studio",
+  "short_name": "Clarinz",
+  "description": "Custom websites for small businesses that need to be found, understood and chosen.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f2ec",
+  "theme_color": "#111110",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
