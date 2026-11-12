@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router";
 import { ArrowUpRight } from "lucide-react";
+import { STUDIO } from "@/lib/studio";
 import { cn } from "@/lib/utils";
 
 export function Brand({
@@ -15,7 +16,7 @@ export function Brand({
   return (
     <Link
       to="/"
-      aria-label="Clarinz Abrasaldo — home"
+      aria-label={`${STUDIO.brand} — home`}
       onClick={() => {
         if (pathname === "/") {
           window.scrollTo({ top: 0, behavior: "smooth" });
@@ -31,24 +32,24 @@ export function Brand({
             : "border-ink/10 bg-ink text-paper group-hover:bg-brand",
         )}
       >
-        C
+        D
       </span>
       <span className="flex flex-col gap-1 leading-none">
         <span
           className={cn(
-            "text-[10px] font-semibold uppercase tracking-[0.34em]",
+            "text-[9.5px] font-semibold uppercase tracking-[0.3em]",
             tone === "paper" ? "text-paper" : "text-ink",
           )}
         >
-          Clarinz
+          THE DEVIGN
         </span>
         <span
           className={cn(
-            "text-[8px] uppercase tracking-[0.28em]",
+            "text-[7.5px] uppercase tracking-[0.34em]",
             tone === "paper" ? "text-paper/45" : "text-smoke",
           )}
         >
-          Abrasaldo
+          STUDIO
         </span>
       </span>
     </Link>

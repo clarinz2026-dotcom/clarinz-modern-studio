@@ -50,6 +50,17 @@ const schema = defineSchema(
       createdAt: v.number(),
     }).index("by_user", ["userId"]),
 
+    inquiries: defineTable({
+      name: v.string(),
+      email: v.string(),
+      subject: v.string(),
+      message: v.string(),
+      status: v.union(v.literal("new"), v.literal("read")),
+      createdAt: v.number(),
+    })
+      .index("by_email_created", ["email", "createdAt"])
+      .index("by_created", ["createdAt"]),
+
     // tableName: defineTable({
     //   ...
     //   // table fields

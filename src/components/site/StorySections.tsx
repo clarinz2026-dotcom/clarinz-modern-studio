@@ -7,6 +7,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { LetterRise, LineRise, Reveal } from "@/components/motion";
+import { mailtoHref, STUDIO } from "@/lib/studio";
 import { CtaLink, SectionLabel } from "./ui";
 
 const questions = [
@@ -258,7 +259,7 @@ export function About() {
 
                 <div className="relative flex h-full flex-col justify-between">
                   <div className="flex items-center justify-between text-[8px] font-semibold uppercase tracking-[0.24em] text-paper/40">
-                    <span>Designer &amp; developer</span>
+                    <span>THE DEVIGN STUDIO</span>
                     <span className="flex items-center gap-1.5">
                       <span className="size-1 rounded-full bg-[#8fbf9f]" />
                       Open
@@ -273,6 +274,9 @@ export function About() {
                       Websites for small businesses that need to be found,
                       understood and chosen.
                     </p>
+                    <p className="mt-4 text-[8px] font-semibold uppercase tracking-[0.2em] text-brand">
+                      {STUDIO.tagline}
+                    </p>
                   </div>
 
                   <div className="flex items-end justify-between border-t border-paper/15 pt-4">
@@ -281,11 +285,11 @@ export function About() {
                         Clarinz Abrasaldo
                       </p>
                       <p className="mt-1 text-[9px] uppercase tracking-[0.16em] text-paper/40">
-                        Independent web studio
+                        Founder &amp; developer
                       </p>
                     </div>
                     <span className="rounded-full border border-paper/15 px-2.5 py-1 text-[8px] uppercase tracking-[0.16em] text-paper/55">
-                      Q1 2027
+                      Studio
                     </span>
                   </div>
                 </div>
@@ -308,10 +312,11 @@ export function About() {
 
             <Reveal delay={0.15} className="mt-8 flex max-w-[56ch] flex-col gap-4">
               <p className="text-[14.5px] leading-7 text-smoke">
-                I’m a full-stack designer and developer. I’ve built for
-                hospitality, healthcare, delivery and retail — and I like the
-                briefs where the business knows what it wants but not how to say
-                it online. That’s usually where I’m most useful.
+                I’m a full-stack designer and developer, and the founder of{" "}
+                {STUDIO.brand}. I’ve built for hospitality, healthcare, delivery
+                and retail — and I like the briefs where the business knows what
+                it wants but not how to say it online. That’s usually where I’m
+                most useful.
               </p>
               <p className="text-[14.5px] leading-7 text-smoke">
                 Every site is designed and built by me: strategy, design, code
@@ -359,10 +364,10 @@ export function About() {
                 Tell me about your business
               </CtaLink>
               <a
-                href="mailto:hello@clarinz.studio"
+                href={mailtoHref}
                 className="link-underline inline-flex items-center gap-1.5 text-[12px] font-semibold text-ink"
               >
-                hello@clarinz.studio
+                {STUDIO.email}
                 <ArrowUpRight className="size-3.5 text-brand" />
               </a>
             </Reveal>

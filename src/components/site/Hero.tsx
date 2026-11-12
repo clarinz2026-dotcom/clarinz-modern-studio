@@ -3,6 +3,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { ArrowDown } from "lucide-react";
 import { BrowserFrame, CafeMock, CafePhoneMock } from "./mockups";
 import { CtaLink } from "./ui";
+import { consultationHref, STUDIO } from "@/lib/studio";
 import { cn } from "@/lib/utils";
 
 const name = "CLARINZ".split("");
@@ -17,7 +18,7 @@ function ScreenStack({ className }: { className?: string }) {
         >
           <div className="relative mx-auto w-[88%] -rotate-2">
             <div className="rounded-[20px] border border-white/10 bg-[#f6f2e9] p-1.5 shadow-[0_70px_120px_-45px_rgba(0,0,0,0.95)]">
-              <BrowserFrame url="clarinz.studio/work/mare">
+              <BrowserFrame url="clar1nz.freebuff.app/work/mare">
                 <CafeMock />
               </BrowserFrame>
             </div>
@@ -53,7 +54,7 @@ function ScreenStack({ className }: { className?: string }) {
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#8fbf9f] opacity-60" />
             <span className="relative inline-flex size-1.5 rounded-full bg-[#8fbf9f]" />
           </span>
-          Booking Q1 2027
+          Open for projects
         </div>
       </div>
     </div>
@@ -134,7 +135,7 @@ export function Hero() {
             style={{ animationDelay: "460ms" }}
           >
             <p className="text-[9.5px] font-semibold uppercase tracking-[0.3em] text-paper/45">
-              Clarinz Abrasaldo — Web designer &amp; developer
+              {STUDIO.brand} — {STUDIO.tagline}
             </p>
             <h2 className="mt-4 max-w-[26ch] text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.02] font-semibold tracking-[-0.045em]">
               Your business deserves a website{" "}
@@ -169,7 +170,12 @@ export function Hero() {
               </a>
             </div>
             <p className="text-[11px] leading-5 text-paper/40 lg:text-right">
-              Free 20-minute intro call.
+              <a
+                href={consultationHref}
+                className="link-underline font-semibold text-paper/70 transition-colors hover:text-paper"
+              >
+                Book a Consultation
+              </a>
               <br />
               Fixed price before any work starts.
             </p>

@@ -33,7 +33,7 @@ const projects: Project[] = [
     note: "Warm type, a menu that reads in seconds, and the phone number always one tap away.",
     tags: ["Reservation-first", "Menu", "Local SEO"],
     tint: "#eee2cf",
-    url: "clarinz.studio/work/mare",
+    url: "clar1nz.freebuff.app/work/mare",
     mock: <CafeMock />,
   },
   {
@@ -45,7 +45,7 @@ const projects: Project[] = [
     note: "Clear pricing, gentle copy and a booking path that works with one thumb.",
     tags: ["Booking-first", "Accessible", "Trust"],
     tint: "#dfe9e4",
-    url: "clarinz.studio/work/northline",
+    url: "clar1nz.freebuff.app/work/northline",
     mock: <DentalMock />,
   },
   {
@@ -57,7 +57,7 @@ const projects: Project[] = [
     note: "Restrained grid, considered motion and a project index that stays out of the way.",
     tags: ["Portfolio", "Editorial", "Motion"],
     tint: "#24241f",
-    url: "clarinz.studio/work/alto",
+    url: "clar1nz.freebuff.app/work/alto",
     dark: true,
     mock: <StudioMock />,
   },

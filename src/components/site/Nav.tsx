@@ -9,6 +9,7 @@ const links = [
   { label: "Process", href: "#process" },
   { label: "About", href: "#about" },
   { label: "Packages", href: "#packages" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export function SiteNav() {

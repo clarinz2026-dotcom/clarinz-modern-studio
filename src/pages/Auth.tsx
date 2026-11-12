@@ -6,6 +6,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Brand } from "@/components/site/ui";
+import { STUDIO } from "@/lib/studio";
 import { useAuth } from "@/hooks/use-auth";
 import {
   ArrowLeft,
@@ -176,10 +177,10 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </div>
 
             <div className="relative flex items-center justify-between border-t border-paper/10 pt-5 text-[8.5px] uppercase tracking-[0.18em] text-paper/35">
-              <span>Clarinz Abrasaldo</span>
+              <span>{STUDIO.brand}</span>
               <span className="flex items-center gap-1.5">
                 <span className="size-1.5 rounded-full bg-[#8fbf9f]" />
-                Booking Q1 2027
+                Open for projects
               </span>
             </div>
           </aside>

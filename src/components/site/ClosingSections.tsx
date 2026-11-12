@@ -1,5 +1,7 @@
 import { ArrowUpRight, Check } from "lucide-react";
 import { LetterRise, Reveal } from "@/components/motion";
+import { SOCIAL_LINKS, STUDIO } from "@/lib/studio";
+import { ContactSection } from "./ContactSection";
 import { Brand, CtaLink, SectionLabel } from "./ui";
 import { cn } from "@/lib/utils";
 
@@ -7,13 +9,8 @@ const packages = [
   {
     name: "Starter",
     pages: "Up to 3 pages",
-    blurb:
-      "A small, sharp site for one location, built for phones first.",
-    features: [
-      "2 rounds of changes",
-      "Mobile-first build",
-      "You own every file",
-    ],
+    blurb: "A small, sharp site for one location, built for phones first.",
+    features: ["2 rounds of changes", "Mobile-first build", "You own every file"],
   },
   {
     name: "Standard",
@@ -154,8 +151,14 @@ export function Packages() {
           delay={0.1}
           className="mt-10 flex flex-col gap-2 border-t border-line pt-6 text-[11.5px] leading-5 text-smoke lg:flex-row lg:items-center lg:justify-between"
         >
-          <p>Every package: hosting and domain are in your name, so the site stays yours.</p>
-          <p>Extra changes after your rounds are billed at a rate we agree up front.</p>
+          <p>
+            Every package: hosting and domain are in your name, so the site
+            stays yours.
+          </p>
+          <p>
+            Extra changes after your rounds are billed at a rate we agree up
+            front.
+          </p>
           <p>Care plan after launch: optional.</p>
         </Reveal>
       </div>
@@ -168,77 +171,19 @@ export function SiteFooter() {
     <div className="bg-paper px-5 pb-8 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-[1240px]">
         <Reveal>
-          <section
-            id="contact"
-            className="relative scroll-mt-24 overflow-hidden rounded-[32px] bg-ink px-6 py-14 text-paper sm:px-10 sm:py-16 lg:px-16 lg:py-20"
-          >
-            <div className="hero-grid pointer-events-none absolute inset-0" aria-hidden="true" />
-            <div
-              className="pointer-events-none absolute -top-40 right-[-6%] size-[520px] rounded-full bg-brand/20 blur-[140px]"
-              aria-hidden="true"
-            />
-            <div className="grain-overlay" />
-
-            <div className="relative">
-              <SectionLabel index="06" tone="paper">
-                Start here
-              </SectionLabel>
-
-              <div className="mt-8 grid gap-10 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
-                <h2 className="font-display text-[clamp(3rem,7.6vw,7rem)] leading-[0.85] text-paper">
-                  LET’S BUILD
-                  <br />
-                  SOMETHING
-                  <br />
-                  <span className="text-brand">WORTH CLICKING.</span>
-                </h2>
-
-                <div>
-                  <p className="max-w-[35ch] text-[14px] leading-7 text-paper/55">
-                    Tell me what you do and the one thing you want your site to
-                    do for you. I’ll reply with a straight answer and a fixed
-                    price.
-                  </p>
-
-                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <CtaLink
-                      to="/auth?returnTo=/dashboard"
-                      variant="paper"
-                      className="w-full sm:w-auto"
-                    >
-                      Start your project
-                    </CtaLink>
-                    <a
-                      href="mailto:hello@clarinz.studio"
-                      className="link-underline inline-flex items-center justify-center gap-1.5 text-[12px] font-semibold text-paper/70 transition-colors hover:text-paper"
-                    >
-                      hello@clarinz.studio
-                      <ArrowUpRight className="size-3.5" />
-                    </a>
-                  </div>
-
-                  <p className="mt-5 flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-paper/40">
-                    <span className="size-1.5 rounded-full bg-[#8fbf9f]" />
-                    Booking projects for Q1 2027
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
+          <ContactSection />
         </Reveal>
 
         <footer className="mt-8 border-t border-line pt-7">
           <div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
             <Brand />
-            <nav
-              aria-label="Footer"
-              className="flex flex-wrap gap-x-6 gap-y-3"
-            >
+            <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-3">
               {[
                 { label: "Work", href: "#work" },
                 { label: "Process", href: "#process" },
                 { label: "About", href: "#about" },
                 { label: "Packages", href: "#packages" },
+                { label: "Contact", href: "#contact" },
               ].map((link) => (
                 <a
                   key={link.href}
@@ -263,12 +208,30 @@ export function SiteFooter() {
             </a>
           </div>
 
-          <div className="mt-7 flex flex-col gap-2 border-t border-line/70 pt-5 text-[10px] text-smoke sm:flex-row sm:items-center sm:justify-between">
-            <p>© 2026 Clarinz Abrasaldo. All rights reserved.</p>
-            <p className="flex items-center gap-1.5">
-              Designed &amp; built by Clarinz
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-line/70 pt-4">
+            <span className="text-[8.5px] font-semibold uppercase tracking-[0.2em] text-smoke">
+              Elsewhere
+            </span>
+            {SOCIAL_LINKS.map((profile) => (
+              <a
+                key={profile.key}
+                href={profile.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-underline inline-flex items-center gap-1 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-smoke transition-colors hover:text-ink"
+              >
+                {profile.label}
+                <ArrowUpRight className="size-3" aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+
+          <div className="mt-5 flex flex-col gap-2 border-t border-line/70 pt-5 text-[10px] text-smoke sm:flex-row sm:items-center sm:justify-between">
+            <p>© 2026 {STUDIO.brand}. All rights reserved.</p>
+            <p className="flex flex-wrap items-center gap-1.5">
+              <span>{STUDIO.fullName}</span>
               <span className="size-1 rounded-full bg-brand" />
-              <span className="uppercase tracking-[0.12em]">Working worldwide</span>
+              <span className="uppercase tracking-[0.12em]">{STUDIO.tagline}</span>
             </p>
           </div>
         </footer>

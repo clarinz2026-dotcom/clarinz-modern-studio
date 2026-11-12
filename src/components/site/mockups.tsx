@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 export function BrowserFrame({
   children,
   className,
-  url = "clarinz.studio/concept",
+  url = "clar1nz.freebuff.app/concept",
 }: {
   children: ReactNode;
   className?: string;

@@ -133,7 +133,7 @@ export default function Dashboard() {
     setSubmitting(true);
     try {
       await createBrief(form);
-      toast.success("Brief received. I’ll reply within 24 hours.");
+      toast.success("Brief received. I’ll be in touch soon.");
       setForm((current) => ({
         ...current,
         business: "",
@@ -228,7 +228,7 @@ export default function Dashboard() {
                 Booking
               </p>
               <p className="mt-0.5 text-[12px] font-semibold">
-                Q1 2027 · 2 spots left
+                Open for new projects
               </p>
             </div>
           </div>
@@ -266,7 +266,7 @@ export default function Dashboard() {
                   <Input
                     value={form.name}
                     onChange={(event) => setField("name")(event.target.value)}
-                    placeholder="Clarinz Abrasaldo"
+                    placeholder="Your name"
                     autoComplete="name"
                     className="h-11 rounded-xl border-line bg-paper/60 text-[13px]"
                   />
@@ -493,7 +493,10 @@ export default function Dashboard() {
                 </p>
                 <ol className="mt-5 flex flex-col gap-4">
                   {[
-                    { title: "I read the brief", copy: "Usually the same day." },
+                    {
+                      title: "I read the brief",
+                      copy: "Every inquiry comes straight to me.",
+                    },
                     {
                       title: "You get a straight reply",
                       copy: "With questions, a direction and a price.",
@@ -518,7 +521,7 @@ export default function Dashboard() {
                 </ol>
                 <div className="mt-5 flex items-center gap-2 border-t border-paper/10 pt-4 text-[9.5px] uppercase tracking-[0.14em] text-paper/40">
                   <Mail className="size-3.5 text-brand" />
-                  Replies within 24 hours
+                  Direct replies from Clarinz
                 </div>
               </div>
             </section>
