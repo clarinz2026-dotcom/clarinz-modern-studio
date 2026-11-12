@@ -1,25 +1,121 @@
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
-import { BrowserFrame, CafeMock, CafePhoneMock } from "./mockups";
+import { BrowserFrame } from "./mockups";
 import { CtaLink } from "./ui";
 import { consultationHref, STUDIO } from "@/lib/studio";
 import { cn } from "@/lib/utils";
 
 const name = "CLARINZ".split("");
 
+function DesktopProjectMock() {
+  return (
+    <div className="flex h-full flex-col justify-between bg-[#fbf7ee] p-4 sm:p-5 text-[#1d1a17]">
+      <div className="flex items-center justify-between">
+        <span className="font-display text-[13px] tracking-[0.18em] sm:text-base text-brand">
+          Glenn Surf School
+        </span>
+        <div className="flex gap-3 text-[5.5px] font-medium uppercase tracking-[0.18em] text-[#5b5650]">
+          <span>Lessons</span>
+          <span className="hidden sm:inline">Schedule</span>
+          <span>Contact</span>
+        </div>
+      </div>
+
+      <div className="mt-3 grid flex-1 grid-cols-[1.15fr_0.85fr] items-center gap-3 sm:gap-4">
+        <div>
+          <p className="text-[6px] uppercase tracking-[0.22em] text-[#7a6c5e]">
+            Surf school · Siargao
+          </p>
+          <h4 className="mt-2 font-display text-[clamp(1.35rem,2.8vw,2.45rem)] leading-[0.9] text-ink">
+            Learn to surf
+            <br />
+            with locals.
+          </h4>
+          <p className="mt-2 max-w-[24ch] text-[6.5px] leading-[1.55] text-[#6a5e51]">
+            Group lessons and private coaching on the beach — first timers
+            welcome.
+          </p>
+          <span className="mt-2.5 inline-flex items-center gap-1 rounded-full bg-brand px-2 py-1 text-[6px] font-semibold uppercase tracking-[0.16em] text-white">
+            Book a lesson <span aria-hidden="true">↗</span>
+          </span>
+        </div>
+
+        <div className="relative h-full max-h-[150px] min-h-[88px] overflow-hidden rounded-lg bg-brand">
+          <div className="absolute -top-5 -right-5 size-20 rounded-full bg-white/20" />
+          <div className="absolute bottom-3 left-2 size-14 rounded-full border-[5px] border-[#fbf7ee]/75" />
+          <div className="absolute right-3 bottom-4 h-8 w-px bg-[#fbf7ee]/30" />
+          <span className="absolute right-2 bottom-2 text-[5px] uppercase tracking-[0.2em] text-white/75">
+            Siargao
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-2 border-t border-[#1d1a17]/10 pt-2 text-[5.5px] uppercase tracking-[0.14em] text-[#6a5e51]">
+        <span className="flex justify-between gap-1">
+          <span>Intro</span>
+          <span>90 min</span>
+        </span>
+        <span className="flex justify-between gap-1">
+          <span>Private</span>
+          <span>2 hrs</span>
+        </span>
+        <span className="flex justify-between gap-1">
+          <span>Kids</span>
+          <span>60 min</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function PhoneProjectMock() {
+  return (
+    <div className="overflow-hidden rounded-[18px] border-[3px] border-[#0f0d0b] bg-[#fbf7ee] text-[#1d1a17] shadow-[0_20px_40px_-18px_rgba(0,0,0,0.55)]">
+      <div className="mx-auto mt-1.5 h-1 w-7 rounded-full bg-black/20" />
+      <div className="p-2.5">
+        <div className="flex items-center justify-between">
+          <span className="font-display text-[8px] tracking-[0.16em]">
+            <span className="text-brand">⬡</span> Glenn
+          </span>
+          <span className="text-[5px] uppercase tracking-[0.16em] text-[#7a6c5e]">
+            Lessons
+          </span>
+        </div>
+        <p className="mt-3 font-display text-[17px] leading-[0.92] text-ink">
+          Learn
+          <br />
+          to surf.
+        </p>
+        <div className="relative mt-2 h-16 overflow-hidden rounded-md bg-brand">
+          <div className="absolute -top-3 -right-3 size-12 rounded-full bg-white/20" />
+          <div className="absolute bottom-2 left-2 size-8 rounded-full border-[3px] border-[#fbf7ee]/70" />
+        </div>
+        <div className="mt-2 rounded-full bg-brand py-1.5 text-center text-[5px] font-semibold uppercase tracking-[0.16em] text-white">
+          Book a lesson
+        </div>
+        <div className="mt-2 flex gap-2">
+          <span className="rounded-full border border-brand/20 px-2 py-1 text-[4.5px] uppercase tracking-[0.14em] text-[#5b5650]">
+            Mon
+          </span>
+          <span className="rounded-full border border-brand/20 px-2 py-1 text-[4.5px] uppercase tracking-[0.14em] text-[#5b5650]">
+            Tue
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ScreenStack({ className }: { className?: string }) {
   return (
     <div className={cn("relative z-10 w-[min(88vw,560px)]", className)}>
       <div className="animate-float">
-        <div
-          className="hero-rise"
-          style={{ animationDelay: "320ms" }}
-        >
+        <div className="hero-rise" style={{ animationDelay: "320ms" }}>
           <div className="relative mx-auto w-[88%] -rotate-2">
             <div className="rounded-[20px] border border-white/10 bg-[#f6f2e9] p-1.5 shadow-[0_70px_120px_-45px_rgba(0,0,0,0.95)]">
-              <BrowserFrame url="clar1nz.freebuff.app/work/mare">
-                <CafeMock />
+              <BrowserFrame url="glensurfschooldemo.freebuff.app">
+                <DesktopProjectMock />
               </BrowserFrame>
             </div>
 
@@ -42,7 +138,7 @@ function ScreenStack({ className }: { className?: string }) {
           style={{ animationDelay: "620ms" }}
         >
           <div className="w-[108px] rotate-6 sm:w-[132px]">
-            <CafePhoneMock />
+            <PhoneProjectMock />
           </div>
         </div>
 
@@ -51,8 +147,8 @@ function ScreenStack({ className }: { className?: string }) {
           style={{ animationDelay: "780ms" }}
         >
           <span className="relative flex size-1.5">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#8fbf9f] opacity-60" />
-            <span className="relative inline-flex size-1.5 rounded-full bg-[#8fbf9f]" />
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand opacity-60" />
+            <span className="relative inline-flex size-1.5 rounded-full bg-brand" />
           </span>
           Open for projects
         </div>
