@@ -1,12 +1,7 @@
 import type { ReactNode } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ImageOff } from "lucide-react";
 import { LetterRise, Reveal } from "@/components/motion";
-import {
-  BrowserFrame,
-  CafeMock,
-  DentalMock,
-  StudioMock,
-} from "./mockups";
+import { BrowserFrame } from "./mockups";
 import { CtaLink, SectionLabel } from "./ui";
 import { cn } from "@/lib/utils";
 
@@ -17,49 +12,48 @@ type Project = {
   summary: string;
   note: string;
   tags: string[];
-  tint: string;
   url: string;
+  logo: string;
+  logoFallback: ReactNode;
   dark?: boolean;
-  mock: ReactNode;
 };
 
 const projects: Project[] = [
   {
     index: "01",
-    name: "Maré Coffee",
-    sector: "Hospitality",
+    name: "Evangelist Funeral Services OPC",
+    sector: "Services",
     summary:
-      "A neighbourhood café site built around one action: reserving a table before the morning rush.",
-    note: "Warm type, a menu that reads in seconds, and the phone number always one tap away.",
-    tags: ["Reservation-first", "Menu", "Local SEO"],
-    tint: "#eee2cf",
-    url: "clar1nz.freebuff.app/work/mare",
-    mock: <CafeMock />,
+      "A calm, dignified site for a funeral services provider, built around the first thing families need: clear, respectful ways to make contact.",
+    note:
+      "Respectful tone, simple navigation and a contact path that stays gently in view.",
+    tags: ["Brand", "Services", "Contact-first"],
+    url: "elisopc.freebuff.app",
+    logo: "/assets/1000003000.png",
+    dark: true,
+    logoFallback: (
+      <span className="font-display text-[11px] tracking-[0.2em] text-white/70">
+        EFS
+      </span>
+    ),
   },
   {
     index: "02",
-    name: "Northline Dental",
-    sector: "Healthcare",
+    name: "Glenn Surf School",
+    sector: "Sports / Travel",
     summary:
-      "A calm, trustworthy clinic site where booking an appointment is the first thing you see.",
-    note: "Clear pricing, gentle copy and a booking path that works with one thumb.",
-    tags: ["Booking-first", "Accessible", "Trust"],
-    tint: "#dfe9e4",
-    url: "clar1nz.freebuff.app/work/northline",
-    mock: <DentalMock />,
-  },
-  {
-    index: "03",
-    name: "Alto Studio",
-    sector: "Architecture",
-    summary:
-      "An editorial portfolio that lets the work speak first — and makes the enquiry form feel inevitable.",
-    note: "Restrained grid, considered motion and a project index that stays out of the way.",
-    tags: ["Portfolio", "Editorial", "Motion"],
-    tint: "#24241f",
-    url: "clar1nz.freebuff.app/work/alto",
-    dark: true,
-    mock: <StudioMock />,
+      "A surf school site for Siargao built to get visitors booking lessons fast, with location, schedule and booking calls easy to tap.",
+    note:
+      "Bold brand mark, mobile-first booking flow and a page that performs well in the places surfers actually look.",
+    tags: ["Booking-first", "Location", "Brand mark"],
+    url: "glensurfschooldemo.freebuff.app",
+    logo: "/assets/1000003014.jpg",
+    dark: false,
+    logoFallback: (
+      <span className="font-display text-[11px] tracking-[0.2em] text-ink">
+        GSS
+      </span>
+    ),
   },
 ];
 
@@ -77,19 +71,18 @@ export function WorkSection() {
             <LetterRise text="WORK" />
           </h2>
           <p className="max-w-[38ch] text-sm leading-7 text-smoke">
-            Concept redesigns I made on my own: what I would build for real
-            businesses. Each one starts with the single action the business
-            needs most.
+            Real projects with the clients I build for. Each one starts with the
+            single action that site needs to earn.
           </p>
         </div>
 
-        <div className="mt-10 flex flex-col gap-6 lg:mt-14 lg:gap-8">
+        <div className="mt-10 flex flex-col gap-5 lg:mt-14 lg:gap-6">
           {projects.map((project, index) => (
             <article
               key={project.name}
               className="lg:sticky"
               style={{
-                top: `calc(5.5rem + ${index * 14}px)`,
+                top: `calc(5.5rem + ${index * 18}px)`,
                 zIndex: index + 1,
               }}
             >
@@ -102,16 +95,13 @@ export function WorkSection() {
                       : "border-line bg-surface text-ink",
                   )}
                 >
-                  <div className="grid gap-3 lg:grid-cols-[1.12fr_0.88fr]">
-                    <div
-                      className="flex items-center rounded-[22px] p-5 sm:p-8 lg:min-h-[410px]"
-                      style={{ backgroundColor: project.tint }}
-                    >
+                  <div className="grid gap-3 lg:grid-cols-[1.02fr_0.98fr]">
+                    <div className="flex items-center rounded-[22px] p-5 sm:p-8 lg:min-h-[380px]">
                       <BrowserFrame
                         url={project.url}
-                        className="w-full shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)]"
+                        className="mx-auto w-[min(92%,1200px)] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)]"
                       >
-                        {project.mock}
+                        <ProjectLogo project={project} />
                       </BrowserFrame>
                     </div>
 
@@ -122,7 +112,7 @@ export function WorkSection() {
                           project.dark ? "text-paper/40" : "text-smoke",
                         )}
                       >
-                        <span>{project.index} / Concept</span>
+                        <span>{project.index}</span>
                         <span>{project.sector}</span>
                       </div>
 
@@ -181,7 +171,9 @@ export function WorkSection() {
                             project.dark ? "text-paper/35" : "text-smoke",
                           )}
                         >
-                          Design &amp; build
+                          Built for {project.name.split(" ").slice(0, 2).join(
+                            " ",
+                          )}
                         </span>
                         <CtaLink
                           to="/auth?returnTo=/dashboard"
@@ -200,7 +192,7 @@ export function WorkSection() {
 
           <article
             className="lg:sticky"
-            style={{ top: "calc(5.5rem + 42px)", zIndex: 4 }}
+            style={{ top: "calc(5.5rem + 36px)", zIndex: 3 }}
           >
             <Reveal y={36}>
               <div className="relative overflow-hidden rounded-[30px] bg-brand p-6 text-white shadow-soft sm:p-10 lg:p-12">
@@ -217,7 +209,7 @@ export function WorkSection() {
                 <div className="relative flex min-h-[300px] flex-col justify-between gap-10">
                   <div className="flex items-center justify-between text-[9px] font-semibold uppercase tracking-[0.2em] text-white/60">
                     <span>Next / Your project</span>
-                    <span>04</span>
+                    <span>03</span>
                   </div>
 
                   <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
@@ -252,4 +244,49 @@ export function WorkSection() {
       </div>
     </section>
   );
+}
+
+function ProjectLogo({ project }: { project: Project }) {
+  return (
+    <div className="flex h-full items-center justify-center p-5 sm:p-6">
+      <img
+        src={project.logo}
+        alt={`${project.name} logo`}
+        className="h-auto max-h-[230px] w-auto rounded-xl object-contain shadow-soft"
+        onError={(event) => {
+          const target = event.currentTarget as HTMLImageElement;
+          target.style.display = "none";
+          const parent = target.parentNode as HTMLElement | null;
+          if (parent) {
+            const fallback = document.createElement("div");
+            fallback.className =
+              "flex h-full items-center justify-center";
+            fallback.innerHTML = "";
+            parent.appendChild(fallback);
+            ReactDOMRenderPlaceholder(project.logoFallback, fallback);
+          }
+        }}
+      />
+      <span className="sr-only">{project.name}</span>
+    </div>
+  );
+}
+
+function ReactDOMRenderPlaceholder(node: ReactNode, container: HTMLElement) {
+  // Keep the fallback visible even when the image fails.
+  // This avoids a full React tree and just shows the provided fallback.
+  const root = typeof document !== "undefined" ? document.createElement("span") : null;
+  if (!root) return;
+  root.className =
+    "flex items-center justify-center font-display text-[11px] tracking-[0.2em]";
+  if (typeof node === "string") {
+    root.textContent = node;
+  } else if (node && typeof node === "object" && "props" in node) {
+    const el = node as { props?: { children?: ReactNode; className?: string } };
+    if (typeof el.props?.className === "string") {
+      root.className = el.props.className;
+    }
+    root.textContent = String((el.props?.children as string) ?? "");
+  }
+  container.appendChild(root);
 }
