@@ -1,0 +1,17 @@
+{
+  "name": "THE DEVIGN STUDIO — Clarinz Abrasaldo",
+  "short_name": "DEVIGN",
+  "description": "Build to perform only. Custom websites for small businesses, designed and built by Clarinz Abrasaldo.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f2ec",
+  "theme_color": "#111110",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
