@@ -1,12 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Brand } from "@/components/site/ui";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2, Lock } from "lucide-react";
 import type { ReactNode } from "react";
@@ -41,8 +34,8 @@ export function RequireAuth({
 
   if (isLoading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" />
+      <main className="flex min-h-svh items-center justify-center bg-paper">
+        <Loader2 className="size-6 animate-spin text-smoke" />
       </main>
     );
   }
@@ -56,33 +49,54 @@ export function RequireAuth({
     }
 
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background p-6">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="flex justify-center">
-              <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-muted">
-                <Lock className="size-5 text-muted-foreground" />
-              </div>
+      <main className="relative flex min-h-svh items-center justify-center overflow-hidden bg-paper px-5 py-12 text-ink">
+        <div
+          className="pointer-events-none absolute -top-40 right-[-10%] size-[520px] rounded-full bg-brand/8 blur-[140px]"
+          aria-hidden="true"
+        />
+
+        <div className="relative w-full max-w-md">
+          <div className="flex justify-center">
+            <Brand />
+          </div>
+
+          <div className="mt-7 rounded-[28px] border border-line bg-surface p-7 text-center sm:p-9">
+            <span className="mx-auto grid size-12 place-items-center rounded-full bg-brand/10 text-brand">
+              <Lock className="size-5" strokeWidth={2.2} />
+            </span>
+
+            <h1 className="mt-5 text-[clamp(1.6rem,3vw,2.1rem)] leading-[1.05] font-semibold tracking-[-0.04em]">
+              {title}
+            </h1>
+            <p className="mt-3 text-[12.5px] leading-6 text-smoke">
+              {description}
+            </p>
+            <p className="mt-4 text-[11px] leading-5 text-smoke/80">
+              You&rsquo;ll come straight back to this page once you&rsquo;re
+              signed in.
+            </p>
+
+            <div className="mt-6 flex flex-col gap-2">
+              <Button
+                className="h-11 w-full cursor-pointer rounded-full bg-brand text-[12.5px] font-semibold text-white hover:bg-brand-deep"
+                onClick={() => navigate(signInHref)}
+              >
+                Sign in
+              </Button>
+              <Button
+                variant="ghost"
+                className="h-11 w-full cursor-pointer rounded-full text-[12px] font-semibold text-smoke hover:bg-ink/5 hover:text-ink"
+                onClick={() => navigate("/")}
+              >
+                Back to home
+              </Button>
             </div>
-            <CardTitle className="text-xl">{title}</CardTitle>
-            <CardDescription>{description}</CardDescription>
-          </CardHeader>
-          <CardContent className="text-center text-sm text-muted-foreground">
-            You'll come straight back to this page once you're signed in.
-          </CardContent>
-          <CardFooter className="flex flex-col gap-2">
-            <Button className="w-full" onClick={() => navigate(signInHref)}>
-              Sign in
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full"
-              onClick={() => navigate("/")}
-            >
-              Back to home
-            </Button>
-          </CardFooter>
-        </Card>
+          </div>
+
+          <p className="mt-5 text-center text-[9px] uppercase tracking-[0.18em] text-smoke">
+            No spam. No sales calls. Just a straight reply.
+          </p>
+        </div>
       </main>
     );
   }

@@ -101,7 +101,7 @@ export function CtaLink({
   }
 
   return (
-    <Link to={to ?? "/auth?returnTo=/dashboard"} className={classes}>
+    <Link to={to ?? "#contact"} className={classes}>
       {content}
     </Link>
   );
