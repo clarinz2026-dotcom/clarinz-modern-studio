@@ -1,7 +1,10 @@
+"use node";
+
 import { action } from "./_generated/server";
+import type { ActionCtx } from "./_generated/server";
 import { v } from "convex/values";
 
-import { STUDIO } from "@/lib/studio";
+import { STUDIO } from "../lib/studio";
 
 export const send = action({
   args: {
@@ -46,7 +49,7 @@ export const sendFallback = action({
 
 
 async function sendEmailViaGateway(
-  ctx: Parameters<typeof action<"email", "send">>[0],
+  ctx: ActionCtx,
   request: {
     to: string;
     replyTo: string;

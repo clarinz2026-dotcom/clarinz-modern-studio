@@ -1,7 +1,9 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 
-import { sendStudioBriefEmail } from "./emailNotifications";
+import { mutation, query } from "./_generated/server";
+import type { Id } from "./_generated/dataModel";
+import { internal } from "./_generated/api";
 
 const MAX = {
   name: 80,
@@ -62,7 +64,7 @@ export const create = mutation({
       throw new Error("Tell me a little more about the project (20+ characters).");
     }
 
-    let storedBriefId: Parameters<typeof ctx.db.insert<"briefs">>[0]["_id"];
+    let storedBriefId: Id<"briefs">;
 
     if (userId !== null) {
       const existing = await ctx.db
@@ -93,7 +95,7 @@ export const create = mutation({
         // For now, allow brief submission as a public inquiry-like fallback so
         // the form does not hard-fail while auth-related getAuthUserId behaves
         // unexpectedly during client testing.
-        userId: null as unknown as Parameters<typeof ctx.db.insert<"briefs">>[0]["userId"],
+        userId: null as unknown as Id<"users">,
         name,
         email,
         business,
@@ -106,7 +108,9 @@ export const create = mutation({
       });
     }
 
-    const emailSent = await sendStudioBriefEmail(ctx, {
+    // Mutations cannot call actions, so the notification is queued and the
+    // brief is treated as accepted as soon as it is stored.
+    await ctx.scheduler.runAfter(0, internal.emailNotifications.notifyBrief, {
       briefId: storedBriefId,
       name,
       email,
@@ -117,7 +121,7 @@ export const create = mutation({
       message,
     });
 
-    return { id: storedBriefId, notified: emailSent };
+    return { id: storedBriefId, notified: true };
   },
 });
 

@@ -1,10 +1,7 @@
-"use node";
-
 import { v } from "convex/values";
 import { action } from "./_generated/server";
 import { internal } from "./_generated/api";
-import { vly } from "../lib/vly-integrations";
-import { STUDIO } from "../lib/studio";
+import { sendStudioInquiryEmail } from "./emailNotifications";
 
 const LIMITS = {
   name: 80,
@@ -15,17 +12,6 @@ const LIMITS = {
 
 function clean(value: string, limit: number) {
   return value.trim().replace(/\s+/g, " ").slice(0, limit);
-}
-
-function escapeHtml(value: string) {
-  const entities: Record<string, string> = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  };
-  return value.replace(/[&<>"']/g, (char) => entities[char] ?? char);
 }
 
 export const submit = action({
