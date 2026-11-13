@@ -203,7 +203,7 @@ export function Process() {
             ))}
           </div>
           <CtaLink
-            to="/auth?returnTo=/dashboard"
+            href="#contact"
             variant="outlineLight"
             className="self-start sm:self-auto"
           >
@@ -360,7 +360,7 @@ export function About() {
             </Reveal>
 
             <Reveal delay={0.3} className="mt-8 flex flex-wrap items-center gap-4">
-              <CtaLink to="/auth?returnTo=/dashboard">
+              <CtaLink href="#contact">
                 Tell me about your business
               </CtaLink>
               <a

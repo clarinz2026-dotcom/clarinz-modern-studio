@@ -128,8 +128,8 @@ createRoot(document.getElementById("root")!).render(
                 path="/dashboard"
                 element={
                   <RequireAuth
-                    title="Sign in to your client portal"
-                    description="Send a project brief, track it, and keep your project in one calm place."
+                    title="Sign in to reach the studio"
+                    description="Your direct line to the studio — email, WhatsApp and profile links in one place."
                   >
                     <Dashboard />
                   </RequireAuth>

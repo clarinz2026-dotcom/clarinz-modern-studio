@@ -134,7 +134,7 @@ export function Packages() {
 
                 <div className="mt-auto pt-7">
                   <CtaLink
-                    to="/auth?returnTo=/dashboard"
+                    href="#contact"
                     variant={pkg.featured ? "paper" : "outline"}
                     className="w-full"
                     icon={<ArrowUpRight className="size-4" />}
@@ -193,12 +193,6 @@ export function SiteFooter() {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="/auth?returnTo=/dashboard"
-                className="link-underline text-[9.5px] font-semibold uppercase tracking-[0.18em] text-smoke transition-colors hover:text-ink"
-              >
-                Client portal
-              </a>
             </nav>
             <a
               href="#top"

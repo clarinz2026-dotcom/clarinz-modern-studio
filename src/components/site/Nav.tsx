@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Brand, CtaLink } from "./ui";
 import { cn } from "@/lib/utils";
 
@@ -78,15 +78,9 @@ export function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-4">
-          <a
-            href="/auth?returnTo=/dashboard"
-            className="link-underline hidden text-[10.5px] font-semibold uppercase tracking-[0.18em] opacity-70 transition-opacity hover:opacity-100 md:inline-flex"
-          >
-            Client portal
-          </a>
           <span className="hidden sm:block">
             <CtaLink
-              to="/auth?returnTo=/dashboard"
+              href="#contact"
               variant="brand"
               className="h-10 px-5 text-[12px]"
             >
@@ -133,17 +127,9 @@ export function SiteNav() {
                   </span>
                 </a>
               ))}
-              <a
-                href="/auth?returnTo=/dashboard"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-between border-b border-line/70 py-3.5 text-[13px] font-semibold"
-              >
-                <span>Client portal</span>
-                <ArrowUpRight className="size-4 text-brand" />
-              </a>
             </nav>
             <CtaLink
-              to="/auth?returnTo=/dashboard"
+              href="#contact"
               className="mt-5 w-full"
             >
               Start a project
