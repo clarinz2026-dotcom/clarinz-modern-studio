@@ -11,7 +11,6 @@ import { useAuth } from "@/hooks/use-auth";
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
   Loader2,
   Mail,
   UserX,
@@ -143,7 +142,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             <div className="relative">
               <p className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.22em] text-paper/40">
                 <span className="size-1.5 rounded-full bg-brand" />
-                Client portal
+                Studio entry point
               </p>
               <p className="mt-5 font-display text-[clamp(2.6rem,4vw,3.7rem)] leading-[0.9]">
                 YOUR PROJECT,
@@ -153,27 +152,57 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 <span className="text-brand">PLACE.</span>
               </p>
               <p className="mt-5 max-w-[34ch] text-[12.5px] leading-6 text-paper/50">
-                Send a brief, see what happens next, and keep the whole project
-                in one place — without another app to learn.
+                Sign in with your email to keep your place, then reach the studio
+                directly from the dashboard.
               </p>
 
-              <ul className="mt-7 flex flex-col gap-3">
-                {[
-                  "A fixed price before work starts",
-                  "One person from brief to launch",
-                  "Your files, your domain, your site",
-                ].map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-2.5 text-[11.5px] text-paper/65"
+              <div className="mt-7 rounded-2xl border border-paper/10 bg-surface/40 p-5 text-paper/80">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.1em]">
+                  Studio contact
+                </p>
+                <p className="mt-2 flex items-start gap-2 text-[12.5px] leading-5 text-paper/70">
+                  <Mail className="shrink-0 size-4 text-brand mt-0.5" />
+                  <a
+                    href={`mailto:${STUDIO.email}`}
+                    className="underline decoration-line underline-offset-2 hover:text-paper"
                   >
-                    <span className="grid size-4.5 shrink-0 place-items-center rounded-full border border-paper/15">
-                      <Check className="size-2.5 text-brand" strokeWidth={3} />
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+                    {STUDIO.email}
+                  </a>
+                </p>
+                <p className="mt-2 flex items-start gap-2 text-[12.5px] leading-5 text-paper/70">
+                  <span className="shrink-0 text-brand">+63</span>
+                  <a
+                    href={`https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-line underline-offset-2 hover:text-paper"
+                  >
+                    {STUDIO.mobile}
+                  </a>
+                </p>
+                <hr className="my-3 border-paper/10" />
+                <p className="text-[9px] uppercase tracking-[0.18em] text-paper/40">
+                  Elsewhere
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {[
+                    { label: "Portfolio", href: STUDIO.portfolio },
+                    { label: "GitHub", href: STUDIO.github },
+                    { label: "LinkedIn", href: STUDIO.linkedin },
+                  ].map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 rounded-full border border-paper/20 bg-paper/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] hover:bg-paper/20"
+                    >
+                      {link.label}
+                      <ArrowRight className="size-3" />
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="relative flex items-center justify-between border-t border-paper/10 pt-5 text-[8.5px] uppercase tracking-[0.18em] text-paper/35">
@@ -191,7 +220,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-smoke">
                   Welcome
                 </p>
-                <h1 className="mt-3 text-[clamp(1.9rem,3.2vw,2.5rem)] leading-[1.02] font-semibold tracking-[-0.045em]">
+                <h1 className="mt-3 text-[clamp(1.9rem,3.2vw,2.5rem)] leading-[1.02] font-semibold tracking[-0.045em]">
                   Sign in to your project.
                 </h1>
                 <p className="mt-3 max-w-[38ch] text-[12.5px] leading-6 text-smoke">
@@ -263,7 +292,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 </Button>
 
                 <p className="mt-4 text-center text-[10px] leading-5 text-smoke">
-                  Guest mode keeps briefs tied to this browser session.
+                  Guest mode keeps your session on this device only.
                 </p>
               </>
             ) : (
@@ -286,7 +315,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   </span>
                 </div>
 
-                <h1 className="mt-5 text-[clamp(1.9rem,3.2vw,2.5rem)] leading-[1.02] font-semibold tracking-[-0.045em]">
+                <h1 className="mt-5 text-[clamp(1.9rem,3.2vw,2.5rem)] leading-[1.02] font-semibold tracking[-0.045em]">
                   Check your inbox.
                 </h1>
                 <p className="mt-3 text-[12.5px] leading-6 text-smoke">
@@ -312,10 +341,11 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                           otp.length === 6 &&
                           !isLoading
                         ) {
-                          const form = (
-                            event.target as HTMLElement
-                          ).closest("form");
-                          if (form) form.requestSubmit();
+                          const form = event.target as HTMLElement;
+                          const closest = form.closest("form");
+                          if (closest) {
+                            closest.requestSubmit();
+                          }
                         }
                       }}
                     >
@@ -370,18 +400,6 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                 </form>
               </>
             )}
-
-            <p className="mt-8 border-t border-line pt-5 text-center text-[9.5px] text-smoke">
-              Secured by{" "}
-              <a
-                href="https://freebuff.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline decoration-line underline-offset-2 transition-colors hover:text-ink"
-              >
-                freebuff.com
-              </a>
-            </p>
           </section>
         </div>
 
