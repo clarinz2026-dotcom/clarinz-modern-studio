@@ -251,7 +251,7 @@ export function Hero() {
           >
             <div className="flex w-full flex-col gap-3 sm:flex-row lg:justify-end">
               <CtaLink
-                to="/auth?returnTo=/dashboard"
+                href="#contact"
                 variant="brand"
                 className="w-full sm:w-auto"
               >
