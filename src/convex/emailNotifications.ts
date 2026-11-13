@@ -4,7 +4,7 @@ import type { ActionCtx } from "./_generated/server";
 import type { Id } from "./_generated/dataModel";
 import { api } from "./_generated/api";
 
-import { STUDIO } from "src/lib/studio";
+import { STUDIO } from "../lib/studio";
 
 interface StudioEmailRequest {
   to: string;
