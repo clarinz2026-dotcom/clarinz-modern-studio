@@ -1,6 +1,8 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
-import type { ActionCtx, Id } from "./_generated/server";
+import type { ActionCtx } from "./_generated/server";
+import type { Id } from "./_generated/dataModel";
+import { api } from "./_generated/api";
 
 import { STUDIO } from "src/lib/studio";
 
@@ -47,9 +49,28 @@ export type BriefNotificationArgs = {
   message: string;
 };
 
-const STUDIO_EMAIL = STUDIO.contact.email;
-const STUDIO_NAME = STUDIO.contact.name;
+const STUDIO_EMAIL = STUDIO.email;
+const STUDIO_NAME = STUDIO.fullName;
 const STUDIO_BRAND = STUDIO.brand;
+
+export const notifyBrief = action({
+  args: {
+    briefId: v.string(),
+    name: v.string(),
+    email: v.string(),
+    business: v.string(),
+    projectType: v.string(),
+    budget: v.string(),
+    timeline: v.string(),
+    message: v.string(),
+  },
+  handler: async (ctx, args) => {
+    return await sendStudioBriefEmail(ctx, {
+      ...args,
+      briefId: args.briefId as Id<"briefs">,
+    });
+  },
+});
 
 export async function sendStudioInquiryEmail(
   ctx: ActionCtx,
