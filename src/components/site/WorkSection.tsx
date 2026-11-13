@@ -176,7 +176,7 @@ export function WorkSection() {
                           )}
                         </span>
                         <CtaLink
-                          to="/auth?returnTo=/dashboard"
+                          href="#contact"
                           variant={project.dark ? "outlineLight" : "outline"}
                           className="h-10 px-4 text-[11px]"
                         >
@@ -224,7 +224,7 @@ export function WorkSection() {
                         the one action your site needs to earn.
                       </p>
                       <CtaLink
-                        to="/auth?returnTo=/dashboard"
+                        href="#contact"
                         variant="paper"
                         className="mt-5"
                       >
