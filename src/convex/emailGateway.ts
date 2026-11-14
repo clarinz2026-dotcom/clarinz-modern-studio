@@ -1,7 +1,6 @@
 import { action } from "./_generated/server";
+import type { ActionCtx } from "./_generated/server";
 import { v } from "convex/values";
-
-import { STUDIO } from "@/lib/studio";
 
 export const send = action({
   args: {
@@ -11,19 +10,15 @@ export const send = action({
     html: v.string(),
     text: v.string(),
   },
-  handler: async (ctx, args) => {
-    return await sendEmailViaGateway(ctx, {
+  handler: async (ctx, args) =>
+    sendEmailViaGateway(ctx, {
       to: args.to,
       replyTo: args.replyTo,
       subject: args.subject,
       html: args.html,
       text: args.text,
-    });
-  },
+    }),
 });
-
-// Internal fallback path used by studio notifications when the project’s
-// primary email integration is temporarily unavailable.
 
 export const sendFallback = action({
   args: {
@@ -33,20 +28,18 @@ export const sendFallback = action({
     html: v.string(),
     text: v.string(),
   },
-  handler: async (ctx, args) => {
-    return await sendEmailViaGateway(ctx, {
+  handler: async (ctx, args) =>
+    sendEmailViaGateway(ctx, {
       to: args.to,
       replyTo: args.replyTo,
       subject: args.subject,
       html: args.html,
       text: args.text,
-    });
-  },
+    }),
 });
 
-
 async function sendEmailViaGateway(
-  ctx: Parameters<typeof action<"email", "send">>[0],
+  _ctx: ActionCtx,
   request: {
     to: string;
     replyTo: string;
@@ -55,19 +48,6 @@ async function sendEmailViaGateway(
     text: string;
   },
 ): Promise<{ ok: boolean; notified: boolean }> {
-  // Delegate to the existing project email integration surface. If that path
-  // is not reachable from this Convex deployment, the caller still has the
-  // stored record and the dashboard inbox path as a fallback.
-  const body = {
-    to: request.to,
-    replyTo: request.replyTo,
-    subject: request.subject,
-    html: request.html,
-    text: request.text,
-  };
-
-  // Keep this mirrored with whatever project email integration is active.
-  // Today that is the Freebuff email gateway used elsewhere in this project.
   const response = await fetch(
     `${process.env.VLY_INTEGRATION_BASE_URL ?? "https://integrations.vly.ai"}/v1/email/send`,
     {
@@ -76,14 +56,14 @@ async function sendEmailViaGateway(
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.VLY_INTEGRATION_KEY}`,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(request),
     },
   );
 
   if (!response.ok) {
-    const text = await response.text().catch(() => "");
+    const responseText = await response.text().catch(() => "");
     throw new Error(
-      `Email gateway returned ${response.status}: ${text.slice(0, 500)}`,
+      `Email gateway returned ${response.status}: ${responseText.slice(0, 500)}`,
     );
   }
 
