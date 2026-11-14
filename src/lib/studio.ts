@@ -6,6 +6,11 @@ export const STUDIO = {
   email: "clarinz2026@gmail.com",
   phone: "+639553991034",
   phoneDisplay: "+63 955 399 1034",
+  mobile: "+63 955 399 1034",
+  contact: {
+    email: "clarinz2026@gmail.com",
+    name: "Clarinz Abrasaldo",
+  },
   portfolio: "https://clar1nz.freebuff.app/",
   github: "https://github.com/clarinz2026-dotcom",
   linkedin: "https://www.linkedin.com/in/clarinz-abrasaldo-28a2a4445",
@@ -34,4 +39,3 @@ export const SOCIAL_LINKS = [
     key: "linkedin",
   },
 ] as const;
-
