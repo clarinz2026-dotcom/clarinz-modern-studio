@@ -11,42 +11,24 @@ import { STUDIO } from "@/lib/studio";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 
-const statusStyles = {
-  new: "bg-brand/10 text-brand",
-  reviewing: "bg-[#d9c38f]/30 text-[#7a5a1c]",
-  scheduled: "bg-[#c9dbc9]/50 text-[#3c6448]",
-} as const;
-
-const statusLabels = {
-  new: "New",
-  reviewing: "In review",
-  scheduled: "Scheduled",
-} as const;
-
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 
+  const userName = user?.name?.trim() || "client";
+  const userEmail = user?.email?.trim() ?? "";
+  const firstName = userName.split(/\s+/)[0];
   const initial = (user?.name?.trim()?.[0] ?? user?.email?.[0] ?? "C").toUpperCase();
-
-  function userName() {
-    return user?.name?.trim() || "client";
-  }
-
-  function userEmail() {
-    return user?.email?.trim() ?? "";
-  }
 
   function openDirectEmail() {
     window.location.href = `mailto:${STUDIO.email}?subject=${encodeURIComponent(
-      `Project inquiry from ${userName()}`
+      `Project inquiry from ${userName}`
     )}`;
   }
 
   function openWhatsApp() {
-    window.location.href = `https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}?text=${encodeURIComponent(
-      `Hi Clarinz, I'd like to discuss a project.\nFrom: ${userName()}${userEmail().trim() ? `\nEmail: ${userEmail()}` : ""}`
-    )}`;
+    const message = `Hi Clarinz, I'd like to discuss a project.\nFrom: ${userName}${userEmail ? `\nEmail: ${userEmail}` : ""}`;
+    window.location.href = `https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
   }
 
   async function handleSignOut() {
@@ -54,19 +36,25 @@ export default function Dashboard() {
     navigate("/");
   }
 
+  const socialLinks = [
+    { label: "Portfolio", href: STUDIO.portfolio },
+    { label: "GitHub", href: STUDIO.github },
+    { label: "LinkedIn", href: STUDIO.linkedin },
+  ];
+
   return (
     <div className="min-h-screen bg-paper text-ink">
       <header className="sticky top-0 z-40 border-b border-line bg-paper/85 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1180px] items-center justify-between gap-3 px-5 sm:px-8">
           <Brand />
           <div className="flex items-center gap-1.5 sm:gap-3">
-            <Link
-              to="/"
+            <a
+              href="/"
               className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-smoke transition-colors hover:text-ink sm:inline-flex"
             >
               <ArrowLeft className="size-3.5" />
               Back to site
-            </Link>
+            </a>
             <div className="hidden items-center gap-2 rounded-full border border-line bg-surface py-1 pr-3 pl-1 sm:flex">
               <span className="grid size-7 place-items-center rounded-full bg-ink text-[10px] font-semibold text-paper">
                 {initial}
@@ -93,10 +81,10 @@ export default function Dashboard() {
           <div>
             <p className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.24em] text-smoke">
               <span className="size-1.5 rounded-full bg-brand" />
+              Client dashboard
             </p>
             <h1 className="mt-3 max-w-[18ch] text-[clamp(2.2rem,4.6vw,3.6rem)] leading-[0.98] font-semibold tracking-[-0.05em]">
-              Let’s get your project moving
-              {firstName ? `, ${firstName}` : ""}.
+              Let’s get your project moving{firstName ? `, ${firstName}` : ""}.
             </h1>
             <p className="mt-3 max-w-[54ch] text-[13.5px] leading-6 text-smoke">
               Start the conversation directly from this page — email or WhatsApp.
@@ -161,8 +149,10 @@ export default function Dashboard() {
 
           <div className="flex flex-col gap-6">
             <section className="rounded-[28px] border border-line bg-surface p-5 shadow-soft sm:p-6">
-              <div className="flex items-center justify-between">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em]">Signed in as</p>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em]">
+                  Signed in as
+                </p>
                 <div className="flex items-center gap-2">
                   <span className="text-[13px] font-medium">
                     {user?.name || user?.email || "—"}
@@ -187,53 +177,46 @@ export default function Dashboard() {
                 <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-paper/40">
                   Studio contact + profile
                 </p>
-              <div className="mt-5 flex flex-col gap-4 rounded-2xl border border-paper/10 bg-surface/40 p-5 text-paper/80">
-                <div className="flex items-center gap-3">
-                  <Mail className="shrink-0 size-4 text-brand" />
-                  <div>
-                    <p className="text-[11px] font-semibold">Email</p>
-                    <a
-                      href={`mailto:${STUDIO.email}`}
-                      className="text-[12px] leading-5 underline decoration-line underline-offset-2 hover:text-paper"
-                    >
-                      {STUDIO.email}
-                    </a>
-                  </div>
-                </div>
 
-                <div className="flex flex-wrap gap-3">
-                  {[
-                    {
-                      label: "WhatsApp",
-                      href: `https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}`,
-                    },
-                    {
-                      label: "Portfolio",
-                      href: STUDIO.portfolio,
-                    },
-                    {
-                      label: "GitHub",
-                      href: STUDIO.github,
-                    },
-                    {
-                      label: "LinkedIn",
-                      href: STUDIO.linkedin,
-                    },
-                  ].map((link) => (
+                <div className="mt-5 flex flex-col gap-4 rounded-2xl border border-paper/10 bg-surface/40 p-5 text-paper/80">
+                  <div className="flex items-center gap-3">
+                    <Mail className="size-4 shrink-0 text-brand" />
+                    <div>
+                      <p className="text-[11px] font-semibold">Email</p>
+                      <a
+                        href={`mailto:${STUDIO.email}`}
+                        className="text-[12px] leading-5 underline decoration-line underline-offset-2 hover:text-paper"
+                      >
+                        {STUDIO.email}
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3">
                     <a
-                      key={link.label}
-                      href={link.href}
+                      href={`https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 rounded-full border border-paper/20 bg-paper/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] hover:bg-paper/20"
                     >
-                      {link.label}
+                      WhatsApp
                       <ArrowUpRight className="size-3" />
                     </a>
-                  ))}
-                </div>
+                    {socialLinks.map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-paper/20 bg-paper/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] hover:bg-paper/20"
+                      >
+                        {link.label}
+                        <ArrowUpRight className="size-3" />
+                      </a>
+                    ))}
+                  </div>
 
-                                                                                                                         <p className="mt-1 text-[9.5px] leading-5 text-paper/45">
+                  <p className="mt-1 text-[9.5px] leading-5 text-paper/45">
                     A compact shortcut to the studio contact links.
                   </p>
                 </div>
@@ -242,9 +225,7 @@ export default function Dashboard() {
 
             <div className="flex flex-col gap-3">
               <a
-                href={`mailto:${STUDIO.email}?subject=${encodeURIComponent(
-                  `Project inquiry from ${userName()}`
-                )}`}
+                href={`mailto:${STUDIO.email}?subject=${encodeURIComponent(`Project inquiry from ${userName}`)}`}
                 className="group flex items-center justify-between rounded-2xl border border-line bg-surface px-5 py-4 shadow-soft transition-colors hover:border-ink/20"
               >
                 <div>
@@ -259,9 +240,9 @@ export default function Dashboard() {
               </a>
 
               <a
-                href={`https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}?text=${encodeURIComponent(
-                  `Hi Clarinz, I'd like to discuss a project.\nFrom: ${userName()}\n${userEmail().trim() ? `Email: ${userEmail()}` : ""}`
-                )}`}
+                href={`https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}?text=${encodeURIComponent(`Hi Clarinz, I'd like to discuss a project.\nFrom: ${userName}${userEmail ? `\nEmail: ${userEmail}` : ""}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center justify-between rounded-2xl border border-line bg-surface px-5 py-4 shadow-soft transition-colors hover:border-ink/20"
               >
                 <div>
@@ -276,168 +257,43 @@ export default function Dashboard() {
               </a>
             </div>
 
-            <p className="mt-3 px-1 text-[10px] text-smoke">
-              <Check className="size-3.5 text-brand" />
-              Every project file, domain, and account stays in your hands.
-            </p>
-
-            <hr className="my-4 border-line" />
-
-            <p className="mt-3 px-1 text-[10px] text-smoke font-semibold uppercase tracking-[0.18em]">
-              Elsewhere
-            </p>
-
-            <div className="flex flex-wrap gap-3 py-1 text-[11px] text-smoke">
-                </div>
-              </div>
-            </section>
-
-            <div className="flex flex-col gap-3">
-              <a
-                href={`mailto:${STUDIO.email}?subject=${encodeURIComponent(
-                  `Project inquiry from ${userName()}`
-                )}`}
-                
-                <div>
-                  <p className="text-[13px] font-semibold">Email a brief</p>
-                  <p className="mt-0.5 text-[10px] text-smoke">
-                    Opens your email app with the studio address and a pre-filled subject.
-                  </p>
-                </div>
-                <span className="grid size-8 place-items-center rounded-full border border-line text-smoke transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-paper">
-                  <ArrowUpRight className="size-3.5" />
-                </span>
-              </a>
-
-              <a
-                href={`https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}?text=${encodeURIComponent(
-                  `Hi Clarinz, I'd like to discuss a project.\nFrom: ${userName()}\n${userEmail().trim() ? `Email: ${userEmail()}` : ""}`
-                )}`}
-                
-                <div>
-                  <p className="text-[13px] font-semibold">WhatsApp the studio</p>
-                  <p className="mt-0.5 text-[10px] text-smoke">
-                    Open a prepared chat with your name and contact details ready to send.
-                  </p>
-                </div>
-                <span className="grid size-8 place-items-center rounded-full border border-line text-smoke transition-colors group-hover:border-ink group-hover:bg-ink group-hover:text-paper">
-                  <ArrowUpRight className="size-3.5" />
-                </span>
-              </a>
+            <div className="rounded-2xl border border-line bg-surface px-5 py-4">
+              <p className="flex items-center gap-2 text-[10px] leading-5 text-smoke">
+                <Check className="size-3.5 shrink-0 text-brand" />
+                Every project file, domain, and account stays in your hands.
+              </p>
             </div>
 
-                        <p className="mt-4 px-1 text-[10px] text-smoke">
-              <Check className="size-3.5 text-brand" />
-              Every project file, domain, and account stays in your hands.
-            </p>
-
-            <hr className="my-4 border-line" />
-
-            <p className="mt-3 px-1 text-[10px] text-smoke font-semibold uppercase tracking-[0.18em]">
-              Elsewhere
-            </p>
-
-            <div className="flex flex-wrap gap-3 py-1 text-[11px] text-smoke">
-              <span className="flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-ink/10" />
-                <a
-                  href={STUDIO.portfolio}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-ink transition-colors"
-                >
-                  Portfolio
-                </a>
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-ink/10" />
-                <a
-                  href={STUDIO.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-ink transition-colors"
-                >
-                  GitHub
-                </a>
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-ink/10" />
-                <a
-                  href={STUDIO.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-ink transition-colors"
-                >
-                  LinkedIn
-                </a>
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-ink/10" />
-                <a
-                  href={`mailto:${STUDIO.email}`}
-                  className="hover:text-ink transition-colors"
-                >
+            <div>
+              <p className="mt-1 px-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-smoke">
+                Elsewhere
+              </p>
+              <div className="mt-3 flex flex-wrap gap-3 text-[11px] text-smoke">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-ink"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+                <a href={`mailto:${STUDIO.email}`} className="transition-colors hover:text-ink">
                   Email
                 </a>
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="size-1.5 rounded-full bg-ink/10" />
-                              <a
-                href={`https://wa.me/${STUDIO.mobile.replace(/\D/g, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-ink transition-colors"
-              >
-                WhatsApp
-              </a>
-            </span>
-          </div>
-
-                      <p className="mt-4 text-center text-[10px] text-smoke/60 uppercase tracking-[0.18em]">
-            © {new Date().getFullYear()} THE DEVIGN STUDIO · BUILD TO PERFORM ONLY.
-          </p>
-
-          <div className="mt-3 flex justify-center gap-2">
-            {[
-              { label: "Portfolio", href: STUDIO.portfolio },
-              { label: "GitHub", href: STUDIO.github },
-              { label: "LinkedIn", href: STUDIO.linkedin },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-ink/10 bg-ink/5 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-smoke/70 hover:text-ink"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-
-          <div className="mt-4 flex justify-center gap-2">
-            {[
-              { label: "Portfolio", href: STUDIO.portfolio },
-              { label: "GitHub", href: STUDIO.github },
-              { label: "LinkedIn", href: STUDIO.linkedin },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-ink/10 bg-ink/5 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-smoke/70 hover:text-ink"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <footer className="mt-12 border-t border-line pt-6 text-center">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-smoke/60">
+            © {new Date().getFullYear()} THE DEVIGN STUDIO · BUILD TO PERFORM ONLY.
+          </p>
+        </footer>
       </main>
-    </div>
-  );
-}
     </div>
   );
 }
