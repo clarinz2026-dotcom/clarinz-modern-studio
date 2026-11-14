@@ -1,5 +1,6 @@
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
 
 import { sendStudioBriefEmail } from "./emailNotifications";
 
@@ -90,9 +91,6 @@ export const create = mutation({
       });
     } else {
       storedBriefId = await ctx.db.insert("briefs", {
-        // For now, allow brief submission as a public inquiry-like fallback so
-        // the form does not hard-fail while auth-related getAuthUserId behaves
-        // unexpectedly during client testing.
         userId: null as unknown as Parameters<typeof ctx.db.insert<"briefs">>[0]["userId"],
         name,
         email,
