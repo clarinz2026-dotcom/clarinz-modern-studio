@@ -3,8 +3,7 @@
 import { v } from "convex/values";
 import { action } from "./_generated/server";
 import { internal } from "./_generated/api";
-import { vly } from "../lib/vly-integrations";
-import { STUDIO } from "../lib/studio";
+import { sendStudioInquiryEmail } from "./emailNotifications";
 
 const LIMITS = {
   name: 80,
@@ -17,17 +16,6 @@ function clean(value: string, limit: number) {
   return value.trim().replace(/\s+/g, " ").slice(0, limit);
 }
 
-function escapeHtml(value: string) {
-  const entities: Record<string, string> = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  };
-  return value.replace(/[&<>"']/g, (char) => entities[char] ?? char);
-}
-
 export const submit = action({
   args: {
     name: v.string(),
@@ -37,7 +25,6 @@ export const submit = action({
     website: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    // Honeypot: pretend success so naive bots do not retry.
     if (args.website?.trim()) {
       return { ok: true, notified: false };
     }
@@ -47,15 +34,11 @@ export const submit = action({
     const subject = clean(args.subject, LIMITS.subject);
     const message = args.message.trim().slice(0, LIMITS.message);
 
-    if (name.length < 2) {
-      throw new Error("Please add your name.");
-    }
+    if (name.length < 2) throw new Error("Please add your name.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       throw new Error("Please add an email address I can reply to.");
     }
-    if (subject.length < 2) {
-      throw new Error("Please add a subject.");
-    }
+    if (subject.length < 2) throw new Error("Please add a subject.");
     if (message.length < 10) {
       throw new Error("Please add a little more detail (10+ characters).");
     }
