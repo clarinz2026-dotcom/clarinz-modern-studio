@@ -1,7 +1,7 @@
 import { api } from "./_generated/api";
 import { action } from "./_generated/server";
 import { v } from "convex/values";
-import type { ActionCtx, Id } from "./_generated/server";
+import type { ActionCtx, MutationCtx, Id } from "./_generated/server";
 
 import { STUDIO } from "../lib/studio";
 
@@ -62,7 +62,7 @@ export async function sendStudioInquiryEmail(
 }
 
 export async function sendStudioBriefEmail(
-  ctx: ActionCtx,
+  ctx: ActionCtx | MutationCtx,
   args: BriefNotificationArgs,
 ): Promise<boolean> {
   return sendStudioEmail(ctx, {
@@ -74,7 +74,7 @@ export async function sendStudioBriefEmail(
   });
 }
 
-async function sendStudioEmail(ctx: ActionCtx, request: EmailRequest) {
+async function sendStudioEmail(ctx: ActionCtx | MutationCtx, request: EmailRequest) {
   try {
     await emailSend(ctx, request);
     return true;
@@ -84,7 +84,7 @@ async function sendStudioEmail(ctx: ActionCtx, request: EmailRequest) {
   }
 }
 
-async function emailSend(ctx: ActionCtx, request: EmailRequest): Promise<void> {
+async function emailSend(ctx: ActionCtx | MutationCtx, request: EmailRequest): Promise<void> {
   const result = await ctx.runAction(api.emailGateway.send, request);
   if (!result || !result.ok) {
     throw new Error(`Email send reported not ok: ${JSON.stringify(result)}`);
