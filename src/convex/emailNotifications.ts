@@ -1,8 +1,9 @@
+import { api } from "./_generated/api";
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import type { ActionCtx, Id } from "./_generated/server";
 
-import { STUDIO } from "src/lib/studio";
+import { STUDIO } from "../lib/studio";
 
 interface StudioEmailRequest {
   to: string;
@@ -21,13 +22,9 @@ export const dispatch = action({
     text: v.string(),
   },
   handler: async (_ctx, args) => {
-    // Studio email dispatch is intentionally thin. The real send path is
-    // implemented in emailGateway.ts and can be swapped for a studio inbox
-    // or a retry queue later without touching the callers.
     return { ok: true, notified: true };
   },
 });
-
 
 export type InquiryNotificationArgs = {
   name: string;
@@ -87,25 +84,14 @@ async function sendStudioEmail(ctx: ActionCtx, request: EmailRequest) {
   }
 }
 
-async function emailSend(
-  ctx: ActionCtx,
-  request: EmailRequest,
-): Promise<void> {
+async function emailSend(ctx: ActionCtx, request: EmailRequest): Promise<void> {
   const result = await ctx.runAction(api.emailGateway.send, request);
   if (!result || !result.ok) {
-    throw new Error(
-      `Email send reported not ok: ${JSON.stringify(result)}`,
-    );
+    throw new Error(`Email send reported not ok: ${JSON.stringify(result)}`);
   }
 }
 
-type EmailRequest = {
-  to: string;
-  replyTo: string;
-  subject: string;
-  html: string;
-  text: string;
-};
+type EmailRequest = StudioEmailRequest;
 
 function escapeHtml(value: string) {
   return value
@@ -119,104 +105,15 @@ function escapeHtml(value: string) {
 function buildInquiryEmailHtml(args: InquiryNotificationArgs) {
   return `<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body {
-        background: #0b0b0b;
-        color: #ece6e0;
-        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        margin: 0;
-        padding: 24px;
-      }
-      .wrapper {
-        max-width: 560px;
-        margin: 0 auto;
-        border: 1px solid #2a2a2a;
-        border-radius: 14px;
-        padding: 22px;
-      }
-      .receipt {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-      .dot {
-        width: 10px;
-        height: 10px;
-        background: #d9c38f;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-      .heading {
-        font-size: 15px;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        margin: 0 0 6px;
-      }
-      .brand {
-        font-size: 12px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: #bcaaa4;
-        margin-bottom: 18px;
-      }
-      .field {
-        margin-bottom: 14px;
-      }
-      .label {
-        font-size: 10.5px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.16em;
-        color: #8a7f72;
-        margin-bottom: 4px;
-      }
-      .value {
-        font-size: 13px;
-        line-height: 1.55;
-      }
-      .message {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-      .footer {
-        margin-top: 22px;
-        padding-top: 16px;
-        border-top: 1px solid #2a2a2a;
-        font-size: 11px;
-        color: #8a7f72;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrapper">
-      <p class="brand">${escapeHtml(STUDIO_BRAND)}</p>
-
-      <div class="receipt">
-        <span class="dot" />
-        <p class="heading">New inquiry received</p>
-      </div>
-
-      <div class="field">
-        <p class="label">From</p>
-        <p class="value">${escapeHtml(args.name)} &lt;${escapeHtml(args.email)}&gt;</p>
-      </div>
-
-      <div class="field">
-        <p class="label">Subject</p>
-        <p class="value">${escapeHtml(args.subject)}</p>
-      </div>
-
-      <div class="field">
-        <p class="label">Message</p>
-        <p class="value message">${escapeHtml(args.message)}</p>
-      </div>
-
-      <div class="footer">
-        Reply directly to this email to reach ${escapeHtml(STUDIO_NAME)}.
-      </div>
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /></head>
+  <body style="background:#0b0b0b;color:#ece6e0;font-family:Arial,sans-serif;margin:0;padding:24px">
+    <div style="max-width:560px;margin:0 auto;border:1px solid #2a2a2a;border-radius:14px;padding:22px">
+      <p style="color:#bcaaa4;letter-spacing:.14em;text-transform:uppercase">${escapeHtml(STUDIO_BRAND)}</p>
+      <h2>New inquiry received</h2>
+      <p><strong>From:</strong> ${escapeHtml(args.name)} &lt;${escapeHtml(args.email)}&gt;</p>
+      <p><strong>Subject:</strong> ${escapeHtml(args.subject)}</p>
+      <p><strong>Message:</strong></p><p style="white-space:pre-wrap">${escapeHtml(args.message)}</p>
+      <hr /><p>Reply directly to this email to reach ${escapeHtml(STUDIO_NAME)}.</p>
     </div>
   </body>
 </html>`;
@@ -238,130 +135,18 @@ function buildInquiryEmailText(args: InquiryNotificationArgs) {
 function buildBriefEmailHtml(args: BriefNotificationArgs) {
   return `<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body {
-        background: #0b0b0b;
-        color: #ece6e0;
-        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        margin: 0;
-        padding: 24px;
-      }
-      .wrapper {
-        max-width: 560px;
-        margin: 0 auto;
-        border: 1px solid #2a2a2a;
-        border-radius: 14px;
-        padding: 22px;
-      }
-      .receipt {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-      .dot {
-        width: 10px;
-        height: 10px;
-        background: #d9c38f;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-      .heading {
-        font-size: 15px;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        margin: 0 0 6px;
-      }
-      .brand {
-        font-size: 12px;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-        color: #bcaaa4;
-        margin-bottom: 18px;
-      }
-      .field {
-        margin-bottom: 14px;
-      }
-      .label {
-        font-size: 10.5px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.16em;
-        color: #8a7f72;
-        margin-bottom: 4px;
-      }
-      .value {
-        font-size: 13px;
-        line-height: 1.55;
-      }
-      .message {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-      .row {
-        display: flex;
-        gap: 22px;
-        flex-wrap: wrap;
-      }
-      .row .field {
-        flex: 1 1 180px;
-        min-width: 140px;
-        margin-bottom: 0;
-      }
-      .footer {
-        margin-top: 22px;
-        padding-top: 16px;
-        border-top: 1px solid #2a2a2a;
-        font-size: 11px;
-        color: #8a7f72;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrapper">
-      <p class="brand">${escapeHtml(STUDIO_BRAND)}</p>
-
-      <div class="receipt">
-        <span class="dot" />
-        <p class="heading">New project brief received</p>
-      </div>
-
-      <div class="row">
-        <div class="field">
-          <p class="label">From</p>
-          <p class="value">${escapeHtml(args.name)} &lt;${escapeHtml(args.email)}&gt;</p>
-        </div>
-        <div class="field">
-          <p class="label">Business</p>
-          <p class="value">${escapeHtml(args.business)}</p>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="field">
-          <p class="label">Project type</p>
-          <p class="value">${escapeHtml(args.projectType)}</p>
-        </div>
-        <div class="field">
-          <p class="label">Budget</p>
-          <p class="value">${escapeHtml(args.budget)}</p>
-        </div>
-        <div class="field">
-          <p class="label">Timeline</p>
-          <p class="value">${escapeHtml(args.timeline)}</p>
-        </div>
-      </div>
-
-      <div class="field">
-        <p class="label">Message</p>
-        <p class="value message">${escapeHtml(args.message)}</p>
-      </div>
-
-      <div class="footer">
-        Brief ID ${escapeHtml(String(args.briefId))} · Reply to this email to reach ${escapeHtml(STUDIO_NAME)}.
-      </div>
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /></head>
+  <body style="background:#0b0b0b;color:#ece6e0;font-family:Arial,sans-serif;margin:0;padding:24px">
+    <div style="max-width:560px;margin:0 auto;border:1px solid #2a2a2a;border-radius:14px;padding:22px">
+      <p style="color:#bcaaa4;letter-spacing:.14em;text-transform:uppercase">${escapeHtml(STUDIO_BRAND)}</p>
+      <h2>New project brief received</h2>
+      <p><strong>From:</strong> ${escapeHtml(args.name)} &lt;${escapeHtml(args.email)}&gt;</p>
+      <p><strong>Business:</strong> ${escapeHtml(args.business)}</p>
+      <p><strong>Project type:</strong> ${escapeHtml(args.projectType)}</p>
+      <p><strong>Budget:</strong> ${escapeHtml(args.budget)}</p>
+      <p><strong>Timeline:</strong> ${escapeHtml(args.timeline)}</p>
+      <p><strong>Message:</strong></p><p style="white-space:pre-wrap">${escapeHtml(args.message)}</p>
+      <hr /><p>Brief ID ${escapeHtml(String(args.briefId))} · Reply to reach ${escapeHtml(STUDIO_NAME)}.</p>
     </div>
   </body>
 </html>`;
